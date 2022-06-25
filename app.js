@@ -5,7 +5,7 @@ const AdminJS = require('adminjs');
 const AdminJSExpress = require('@adminjs/express');
 const AdminJSMongoose = require('@adminjs/mongoose');
 
-const { UserResourceOptions } = require("./position/user.options");
+const { UserResourceOptions } = require("./resources/user.options");
 
 AdminJS.registerAdapter(AdminJSMongoose);
 
