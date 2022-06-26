@@ -15,10 +15,15 @@ const config = require("./config");
 // init adminJS
 const adminJS = new AdminJS({
     databases: [],
-    rootPath: '/admin',
+    rootPath: '/',
     resources: [UserResourceOptions]
 });
-const adminJSRouter = AdminJSExpress.buildRouter(adminJS);
+const adminJSRouter = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
+    authenticate: async (email, password) => {
+        return true;
+    },
+    cookiePassword: config.COOKIE_PASSWORD,
+});
 
 // mount adminJS route and run express app
 const app = express();
