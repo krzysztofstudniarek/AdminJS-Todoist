@@ -25,7 +25,6 @@ const adminJSRouter = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
     authenticate: async (email, password) => {
         const user = await UserResourceOptions.resource.findOne({ email });
         if (user) {
-            console.log(user)
             const matched = await bcrypt.compare(password, user.encryptedPassword)
             if (matched) {
               return user;
@@ -34,7 +33,11 @@ const adminJSRouter = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
         return false;
     },
     cookiePassword: config.COOKIE_PASSWORD
-});
+    }, null,
+    {
+        resave:true,
+        saveUninitialized: true
+    });
 
 // mount adminJS route and run express app
 const app = express();
