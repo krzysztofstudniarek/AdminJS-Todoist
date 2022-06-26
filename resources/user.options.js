@@ -6,13 +6,7 @@ const UserResourceOptions = {
     options: {
         properties: {
           encryptedPassword: {
-            isVisible: false,
-          },
-          password: {
-            type: 'string',
-            isVisible: {
-              list: false, edit: true, filter: false, show: false,
-            },
+            isVisible: true,
           },
         },
         actions: {

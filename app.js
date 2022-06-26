@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const AdminJS = require('adminjs');
 const AdminJSExpress = require('@adminjs/express');
 const AdminJSMongoose = require('@adminjs/mongoose');
+const bcrypt = require('bcrypt')
 
 const { UserResourceOptions } = require("./resources/user.options");
 
@@ -16,13 +17,23 @@ const config = require("./config");
 const adminJS = new AdminJS({
     databases: [],
     rootPath: '/',
-    resources: [UserResourceOptions]
+    loginPath: '/login',
+    resources: [UserResourceOptions],
 });
+
 const adminJSRouter = AdminJSExpress.buildAuthenticatedRouter(adminJS, {
     authenticate: async (email, password) => {
-        return true;
+        const user = await UserResourceOptions.resource.findOne({ email });
+        if (user) {
+            console.log(user)
+            const matched = await bcrypt.compare(password, user.encryptedPassword)
+            if (matched) {
+              return user;
+            }
+        }
+        return false;
     },
-    cookiePassword: config.COOKIE_PASSWORD,
+    cookiePassword: config.COOKIE_PASSWORD
 });
 
 // mount adminJS route and run express app
